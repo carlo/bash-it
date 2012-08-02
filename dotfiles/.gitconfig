@@ -19,7 +19,7 @@
   subl  = ! sh -c 'subl `git fshow $1`' -
 [core]
   autocrlf = input
-  editor = subl -w
+  editor = /usr/local/bin/subl -w
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [difftool]
