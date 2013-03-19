@@ -27,8 +27,8 @@ VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 RBENV_THEME_PROMPT_PREFIX=' |'
 RBENV_THEME_PROMPT_SUFFIX='|'
 
-RBFU_THEME_PROMPT_PREFIX=' |'
-RBFU_THEME_PROMPT_SUFFIX='|'
+CHRUBY_THEME_PROMPT_PREFIX=' |'
+CHRUBY_THEME_PROMPT_SUFFIX='|'
 
 function scm {
   if [[ -f .git/HEAD ]]; then SCM=$SCM_GIT
@@ -126,14 +126,14 @@ function rbenv_version_prompt {
   fi
 }
 
-function rbfu_version_prompt {
-  if [[ $RBFU_RUBY_VERSION ]]; then
-    echo -e "${RBFU_THEME_PROMPT_PREFIX}${RBFU_RUBY_VERSION}${RBFU_THEME_PROMPT_SUFFIX}"
+function chruby_version_prompt {
+  if [[ $RUBY_VERSION ]]; then
+    echo -e "${CHRUBY_THEME_PROMPT_PREFIX}${RUBY_VERSION}${CHRUBY_THEME_PROMPT_SUFFIX}"
   fi
 }
 
 function ruby_version_prompt {
-  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)"
+  echo -e "$(chruby_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)"
 }
 
 function virtualenv_prompt {
