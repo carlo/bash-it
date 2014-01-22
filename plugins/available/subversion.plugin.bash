@@ -19,3 +19,25 @@ svn_add(){
 
     svn status | grep '^\?' | sed -e 's/? *//' | sed -e 's/ /\ /g' | xargs svn add
 }
+
+svnshlog() {
+  about 'SVN short log format'
+  group 'svn'
+
+  svn log "$@" | (
+    read
+    while true; do
+      read h || break;
+      read
+      m=""
+      while read l; do
+        echo "$l" | grep -q '^[-]\+$' && break
+        [ -z "$m" ] && m=$l
+      done
+
+      echo "$h % $m" | sed 's#\(.*\) | \(.*\) | \([-0-9 :]\{16\}\).* % \(.*\)#\3 | \1 | \2 | \4#'
+    done
+  )
+}
+
+[[ -e /usr/local/bin/colorsvn ]] && alias svn=colorsvn
