@@ -16,6 +16,7 @@ alias dnsflush="dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias ls='ls -alFG'
 alias rebuild_context_menu="sudo /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 alias v="vagrant"
+alias clear_font_cache="atsutil databases -removeUser; sudo atsutil server -shutdown && atsutil server -ping"
 
 # enable bash 4 recursive globbing
 shopt -s globstar
