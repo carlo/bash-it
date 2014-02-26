@@ -11,19 +11,22 @@
 // file -- it made a nice starting point.
 
 var mash = [ 'cmd', 'alt', 'ctrl' ],
+  mashMove = [ 'alt', 'ctrl' ],
+  nudgePixels = 10,
   padding = 4,
   previousSizes = {};
 
 
 // ### General key configurations
 //
-// My space key is toggling any window between full screen and its initial
-// size and position.
+// My space key together with `Ctrl`+`Cmd`+`Alt` is toggling any window
+// between full screen and its initial size and position.
 api.bind( 'space', mash, function() {
   Window.focusedWindow().toggleFullscreen();
 });
 
-// My keypad keys are set up to push any window to either 25% or 50%:
+// My keypad keys together with `Ctrl`+`Cmd`+`Alt` are set up to push any
+// window to either 25% or 50%:
 //
 // - top-left (NW)
 // - top half (N)
@@ -62,8 +65,8 @@ api.bind( 'pad1', mash, function() {
   Window.focusedWindow().toSW();
 });
 
-// The cursor keys are making any window occupy any half of the screen
-// (N, E, S, W).
+// The cursor keys together with `Ctrl`+`Cmd`+`Alt` make any window occupy any
+// half of the screen (N, E, S, W).
 api.bind( 'up', mash, function() {
   Window.focusedWindow().toN();
 });
@@ -79,6 +82,24 @@ api.bind( 'down', mash, function() {
 api.bind( 'left', mash, function() {
   Window.focusedWindow().toW();
 });
+
+// The cursor keys together with `Ctrl`+`Alt` move a window.
+api.bind( 'up', mashMove, function() {
+  Window.focusedWindow().nudgeUp();
+});
+
+api.bind( 'right', mashMove, function() {
+  Window.focusedWindow().nudgeRight();
+});
+
+api.bind( 'down', mashMove, function() {
+  Window.focusedWindow().nudgeDown();
+});
+
+api.bind( 'left', mashMove, function() {
+  Window.focusedWindow().nudgeLeft();
+});
+
 
 // #### Apps: Chrome + Sublime
 //
@@ -249,6 +270,58 @@ Window.prototype.toggleFullscreen = function() {
   }
 
   return this;
+};
+
+
+// #### Window#nudgeLeft()
+//
+// Move the currently focussed window left by [`nudgePixel`] pixels.
+Window.prototype.nudgeLeft = function() {
+  var win = Window.focusedWindow(),
+    frame = win.frame();
+
+  frame.x -= ( frame.x >= nudgePixels ) ? 10 : 0;
+  win.setFrame( frame );
+};
+
+
+
+// #### Window#nudgeRight()
+//
+// Move the currently focussed window right by [`nudgePixel`] pixels.
+Window.prototype.nudgeRight = function() {
+  var win = Window.focusedWindow(),
+    frame = win.frame(),
+    maxLeft = win.screen().frameIncludingDockAndMenu().width - frame.width;
+
+  frame.x += ( frame.x < maxLeft - nudgePixels ) ? 10 : 0;
+  win.setFrame( frame );
+};
+
+
+// #### Window#nudgeUp()
+//
+// Move the currently focussed window left by [`nudgePixel`] pixels.
+Window.prototype.nudgeUp = function() {
+  var win = Window.focusedWindow(),
+    frame = win.frame();
+
+  frame.y -= ( frame.y >= nudgePixels ) ? 10 : 0;
+  win.setFrame( frame );
+};
+
+
+
+// #### Window#nudgeDown()
+//
+// Move the currently focussed window right by [`nudgePixel`] pixels.
+Window.prototype.nudgeDown = function() {
+  var win = Window.focusedWindow(),
+    frame = win.frame(),
+    maxLeft = win.screen().frameIncludingDockAndMenu().height - frame.height;
+
+  frame.y += ( frame.y < maxLeft - nudgePixels ) ? 10 : 0;
+  win.setFrame( frame );
 };
 
 
