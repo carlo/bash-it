@@ -12,6 +12,7 @@
 
 var mash = [ 'cmd', 'alt', 'ctrl' ],
   mashMove = [ 'alt', 'ctrl' ],
+  mashMoveMore = [ 'shift', 'alt', 'ctrl' ],
   nudgePixels = 10,
   padding = 4,
   previousSizes = {};
@@ -98,6 +99,25 @@ api.bind( 'down', mashMove, function() {
 
 api.bind( 'left', mashMove, function() {
   Window.focusedWindow().nudgeLeft();
+});
+
+
+// The cursor keys together with `Shift`+`Ctrl`+`Alt` move a window just like
+// the previous set but 5 times as fast.
+api.bind( 'up', mashMoveMore, function() {
+  Window.focusedWindow().nudgeUp( 5 );
+});
+
+api.bind( 'right', mashMoveMore, function() {
+  Window.focusedWindow().nudgeRight( 5 );
+});
+
+api.bind( 'down', mashMoveMore, function() {
+  Window.focusedWindow().nudgeDown( 5 );
+});
+
+api.bind( 'left', mashMoveMore, function() {
+  Window.focusedWindow().nudgeLeft( 5 );
 });
 
 
@@ -276,11 +296,12 @@ Window.prototype.toggleFullscreen = function() {
 // #### Window#nudgeLeft()
 //
 // Move the currently focussed window left by [`nudgePixel`] pixels.
-Window.prototype.nudgeLeft = function() {
+Window.prototype.nudgeLeft = function( factor ) {
   var win = Window.focusedWindow(),
-    frame = win.frame();
+    frame = win.frame(),
+    pixels = nudgePixels * ( factor || 1 );
 
-  frame.x -= ( frame.x >= nudgePixels ) ? 10 : 0;
+  frame.x -= ( frame.x >= pixels ) ? pixels : 0;
   win.setFrame( frame );
 };
 
@@ -289,12 +310,13 @@ Window.prototype.nudgeLeft = function() {
 // #### Window#nudgeRight()
 //
 // Move the currently focussed window right by [`nudgePixel`] pixels.
-Window.prototype.nudgeRight = function() {
+Window.prototype.nudgeRight = function( factor ) {
   var win = Window.focusedWindow(),
     frame = win.frame(),
-    maxLeft = win.screen().frameIncludingDockAndMenu().width - frame.width;
+    maxLeft = win.screen().frameIncludingDockAndMenu().width - frame.width,
+    pixels = nudgePixels * ( factor || 1 );
 
-  frame.x += ( frame.x < maxLeft - nudgePixels ) ? 10 : 0;
+  frame.x += ( frame.x < maxLeft - pixels ) ? pixels : 0;
   win.setFrame( frame );
 };
 
@@ -302,11 +324,12 @@ Window.prototype.nudgeRight = function() {
 // #### Window#nudgeUp()
 //
 // Move the currently focussed window left by [`nudgePixel`] pixels.
-Window.prototype.nudgeUp = function() {
+Window.prototype.nudgeUp = function( factor ) {
   var win = Window.focusedWindow(),
-    frame = win.frame();
+    frame = win.frame(),
+    pixels = nudgePixels * ( factor || 1 );
 
-  frame.y -= ( frame.y >= nudgePixels ) ? 10 : 0;
+  frame.y -= ( frame.y >= pixels ) ? pixels : 0;
   win.setFrame( frame );
 };
 
@@ -315,12 +338,13 @@ Window.prototype.nudgeUp = function() {
 // #### Window#nudgeDown()
 //
 // Move the currently focussed window right by [`nudgePixel`] pixels.
-Window.prototype.nudgeDown = function() {
+Window.prototype.nudgeDown = function( factor ) {
   var win = Window.focusedWindow(),
     frame = win.frame(),
-    maxLeft = win.screen().frameIncludingDockAndMenu().height - frame.height;
+    maxLeft = win.screen().frameIncludingDockAndMenu().height - frame.height,
+    pixels = nudgePixels * ( factor || 1 );
 
-  frame.y += ( frame.y < maxLeft - nudgePixels ) ? 10 : 0;
+  frame.y += ( frame.y < maxLeft - pixels ) ? pixels : 0;
   win.setFrame( frame );
 };
 
