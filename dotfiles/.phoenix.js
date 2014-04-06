@@ -66,6 +66,10 @@ api.bind( 'pad1', mash, function() {
   Window.focusedWindow().toSW();
 });
 
+api.bind( 'pad-', mash, function() {
+  Window.focusedWindow().toGrid( 0.25, 0, 0.5, 1 );
+});
+
 // The cursor keys together with `Ctrl`+`Cmd`+`Alt` make any window occupy any
 // half of the screen (N, E, S, W).
 api.bind( 'up', mash, function() {
@@ -126,8 +130,10 @@ api.bind( 'left', mashMoveMore, function() {
 // When working on frontend stuff I like my Sublime Text to cover the left
 // (East) half of the screen and Chrome the right (West) half.
 api.bind( '1', mash, function() {
-  var chromeWindow = App.findByTitle('Google Chrome').findWindowNotMatchingTitle('^Developer Tools -'),
-    sublimeWindow = App.findByTitle('Sublime Text').firstWindow();
+  var chromeApp = App.findByTitle('Google Chrome'),
+    chromeWindow = chromeApp && chromeApp.findWindowNotMatchingTitle('^Developer Tools -'),
+    sublimeApp = App.findByTitle('Sublime Text'),
+    sublimeWindow = sublimeApp && sublimeApp.firstWindow();
 
   api.alert( 'Chrome + Sublime', 0.25 );
 
@@ -146,9 +152,9 @@ api.bind( '1', mash, function() {
 // East and my Chrome devtools window to the W, the latter not quite on full
 // height.
 api.bind( '2', mash, function() {
-  var chrome = App.findByTitle('Google Chrome'),
-    browseWindow = chrome.findWindowNotMatchingTitle('^Developer Tools -'),
-    devToolsWindow = chrome.findWindowMatchingTitle('^Developer Tools -');
+  var chromeApp = App.findByTitle('Google Chrome'),
+    browseWindow = chromeApp && chromeApp.findWindowNotMatchingTitle('^Developer Tools -'),
+    devToolsWindow = chromeApp && chromeApp.findWindowMatchingTitle('^Developer Tools -');
 
   api.alert( 'Chrome Dev Tools Layout', 0.25 );
 
