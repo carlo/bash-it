@@ -184,15 +184,24 @@ api.bind( '2', mash, function() {
 //
 // The window will be automatically focussed.  Returns the window instance.
 Window.prototype.toGrid = function( x, y, width, height ) {
-  var screen = this.screen().frameWithoutDockOrMenu();
+  var screen = this.screen().frameWithoutDockOrMenu(),
+    newFrame = {
+      x: Math.round( x * screen.width ) + padding + screen.x,
+      y: Math.round( y * screen.height ) + padding + screen.y,
+      width: Math.round( width * screen.width ) - ( 2 * padding ),
+      height: Math.round( height * screen.height ) - ( 2 * padding )
+    };
 
-  this.setFrame({
-    x: Math.round( x * screen.width ) + padding + screen.x,
-    y: Math.round( y * screen.height ) + padding + screen.y,
-    width: Math.round( width * screen.width ) - ( 2 * padding ),
-    height: Math.round( height * screen.height ) - ( 2 * padding )
-  });
+  // When setting the `height` to 1, the padding isn't applied at the bottom
+  // end of the frame.  (I guess it's a bug.)  Setting the frame to a height
+  // less than `1` first is a workaround to counter that behaviour.
+  if ( height === 1 ) {
+    this.setFrame(
+      _({}).extend( newFrame, { height: screen.height - 50 })
+    );
+  }
 
+  this.setFrame( newFrame );
   this.focusWindow();
 
   return this;
